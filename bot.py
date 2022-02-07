@@ -585,7 +585,7 @@ def get_leaved(text,chat,bot):
 def get_added(text,chat,bot):    
     try:
         group = chat['abs_object']['title']
-        send_text = 'سلام دوست عزیز به ' + group + ' خوش آمدی ❤ \n لطفا قوانین رو رعایت کن ✅'
+        send_text = 'سلام دوست عزیز به ' + group + ' خوش آمدی ❤ \n لطفا قوانین رو رعایت کن ✅\nکاناله ما: @RobotHL'
         bot.sendMessage(chat['object_guid'],  send_text, chat['last_message']['message_id'])
     except:
         print('rub server err')
@@ -688,7 +688,7 @@ while(2 > 1):
                             if text == '!start':
                                 print('message geted and sinned')
                                 try:
-                                    bot.sendMessage(chat['object_guid'], 'سلام \n به ابر سرویس کروز خوش آمدید ❤\n\n لطفا جهت راهنما \n!help \nرا ارسال کنید',chat['last_message']['message_id'])
+                                    bot.sendMessage(chat['object_guid'], 'سلام \n به ابر سرویس HL خوش آمدید ❤\n\n لطفا جهت راهنما \n!help \nرا ارسال کنید',chat['last_message']['message_id'])
                                     print('sended response')    
                                 except:
                                     print('server bug1')
