@@ -8,6 +8,9 @@ import math
 import os
 import pathlib
 import random
+import the_module_name
+from importlib import reload
+reload(the_module_name)
 import sys
 import time
 from json import dumps, loads
@@ -670,7 +673,7 @@ test_usvl = ''
 auth = "djbopjhuafmsqpjggxydzjgbgodhsufl"
 bot = Bot(auth)
 list_message_seened = []
-time_reset = random.floor(datetime.datetime.today().timestamp()) + 350
+time_reset = random._floor(datetime.datetime.today().timestamp()) + 350
 while(2 > 1):
     try:
         chats_list:list = bot.get_updates_all_chats()
