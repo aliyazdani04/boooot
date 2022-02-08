@@ -670,7 +670,7 @@ test_usvl = ''
 auth = "djbopjhuafmsqpjggxydzjgbgodhsufl"
 bot = Bot(auth)
 list_message_seened = []
-time_reset = random_floor(datetime.datetime.today().timestamp()) + 350
+time_reset = random._floor(datetime.datetime.today().timestamp()) + 350
 while(2 > 1):
     try:
         chats_list:list = bot.get_updates_all_chats()
