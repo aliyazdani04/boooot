@@ -5,6 +5,11 @@ import datetime
 import glob
 import json
 import math
+import urllib
+from rubika.encryption import encryption
+from rubika.tools import Tools
+from rubika.client import Bot
+from requests import get
 import os
 import pathlib
 import random
@@ -35,6 +40,58 @@ from api_rubika import Bot,encryption
 
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
+
+def hasAds(msg):
+	links = ["http://","https://",".ir",".com",".org",".net",".me"]
+	for i in links:
+		if i in msg:
+			return True
+
+# static variable
+answered, sleeped, retries = [], False, {}
+
+alerts, blacklist = [] , []
+
+def alert(guid,user,link=False):
+	alerts.append(guid)
+	coun = int(alerts.count(guid))
+
+	haslink = ""
+	if link : haslink = "گزاشتن لینک در گروه ممنوع میباشد .\n\n"
+
+	if coun == 1:
+		bot.sendMessage(target, "💢 اخطار [ @"+user+" ] \n"+haslink+" شما (1/3) اخطار دریافت کرده اید .\n\nپس از دریافت 3 اخطار از گروه حذف خواهید شد !\nجهت اطلاع از قوانین کلمه (قوانین) را ارسال کنید .")
+	elif coun == 2:
+		bot.sendMessage(target, "💢 اخطار [ @"+user+" ] \n"+haslink+" شما (2/3) اخطار دریافت کرده اید .\n\nپس از دریافت 3 اخطار از گروه حذف خواهید شد !\nجهت اطلاع از قوانین کلمه (قوانین) را ارسال کنید .")
+
+	elif coun == 3:
+		blacklist.append(guid)
+		bot.sendMessage(target, "🚫 کاربر [ @"+user+" ] \n (3/3) اخطار دریافت کرد ، بنابراین اکنون اخراج میشود .")
+		bot.banGroupMember(target, guid)
+
+
+while True:
+	# time.sleep(15)
+	try:
+		admins = [i["member_guid"] for i in bot.getGroupAdmins(target)["data"]["in_chat_members"]]
+		min_id = bot.getGroupInfo(target)["data"]["chat"]["last_message_id"]
+
+		while True:
+			try:
+				messages = bot.getMessages(target,min_id)
+				break
+			except:
+				continue
+
+		for msg in messages:
+			try:
+				if msg["type"]=="Text" and not msg.get("message_id") in answered:
+					if not sleeped:
+						if hasAds(msg.get("text")) and not msg.get("author_object_guid") in admins :
+							guid = msg.get("author_object_guid")
+							user = bot.getUserInfo(guid)["data"]["user"]["username"]
+							bot.deleteMessages(target, [msg.get("message_id")])
+							alert(guid,user,True)		
 
 def hasInsult(msg):
 	swData = [False,None]
@@ -577,7 +634,7 @@ def get_font_fa(text,chat,bot):
 
 def get_leaved(text,chat,bot):
     try:
-        send_text = 'مراقبت کن😈'
+        send_text = 'از تو سایه برو😉💕'
         bot.sendMessage(chat['object_guid'],  send_text, chat['last_message']['message_id'])
     except:
         print('rub server err')
